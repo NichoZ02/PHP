@@ -1,13 +1,53 @@
 <?php
+   $p = 0;
+   $t = ['Carta', 'Sasso', 'Forbice'];
 
-$p = 0;
+   function risultato($g1, $g2)
+   {
+      if($g1 == 0 && $g2 == 1)
+      {
+         return "Giocatore 1 vince";
+      }
+      else if($g1 == 0 && $g2 == 2)
+      {
+         return "Giocatore 2 vince";
+      }
+      else if($g1 == 0 && $g2 == 0)
+      {
+         return "Pareggio";     
+      }
+      if($g1 == 1 && $g2 == 2)
+      {
+         return "Giocatore 1 vince";
+      }
+      else if($g1 == 1 && $g2 == 0)
+      {
+         return "Giocatore 2 vince";
+      }
+      else if($g1 == 1 && $g2 == 1)
+      {
+         return "Pareggio";
+      }
+      if($g1 == 2 && $g2 == 0)
+      {
+         return "Giocatore 1 vince";
+      }
+      else if($g1 == 2 && $g2 == 1)
+      {
+         return "Giocatore 2 vince";
+      }
+      else if($g1 == 2 && $g2 == 2)
+      {
+         return "Pareggio";
+      }
 
-if(isset($_POST['B']))
-{
-   $p = $_POST['P'];
+   }
 
-}
+   if(isset($_POST['B']))
+   {
+      $p = $_POST['P'];
 
+   }
 ?>
 
 <html>
@@ -19,39 +59,35 @@ if(isset($_POST['B']))
       <link rel = "stylesheet" href = "style.css">
    </head>
    <body>
+      <form name = 'F1' method = 'POST' action = 'index.php'>
+         <p> Numero di partite: </p>
+         <input type = 'text' name = 'P' size = '5' value = '<?php echo $p; ?>' />
+         <input type = 'submit' name = 'B' value = 'Genera'/>
+      </form>
 
-   <form name = 'F1' method = 'POST' action = 'index.php'>
-      <p> Numero di partite: </p>
-      <input type = 'text' name = 'P' size = '5' value = '<?php echo $p; ?>' />
-      <input type = 'submit' name = 'B' value = 'matrice'/>
-   </form>
+      <br><br><br>
 
-   <br><br><br>
+      <table align = "center" border= "2">
 
-   <table align = "center" border= "2">
+         <tr>
+            <td width = "250px" padding = "3px"> Giocatore 1 </td>
+            <td width = "250px" padding = "3px"> Giocatore 2 </td>
+            <td width = "250px" padding = "3px"> Risultato </td>
+         </tr>
 
-      <tr>
-         <td> Giocatore 1 </td>
-         <td> Giocatore 2 </td>
-         <td> Risultato </td>
-      </tr>
-
-      <?php
-
-         for($j = 0; $j < $p; $j++)
-         {
-            echo "<tr>";
-            for($i = 0; $i < 3; $i++)
+         <?php  
+            for($j = 0; $j < $p; $j++)
             {
-               $t=mt_rand(1, 6);
-               echo "<td>".$t."</td>";
+               $g1 = rand(0, 2);
+               $g2 = rand(0, 2);
+
+               echo "<tr>";
+                  echo "<td width = '250px' padding = '3px'>".$t[$g1]."</td>";
+                  echo "<td width = '250px' padding = '3px'>".$t[$g2]."</td>";
+                  echo "<td width = '250px' padding = '3px'>".risultato($g1, $g2)."</td>";
+               echo "</tr>";
             }
-            echo "</tr>";
-         }
-
-      ?>
-
-   </table>
-
+         ?>
+      </table>
    </body>
 </html>
