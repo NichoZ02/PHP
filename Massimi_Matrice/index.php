@@ -2,7 +2,9 @@
 
 $r = 0;
 $c = 0;
-// controllo il passaggio dal bottone B
+$num = [];
+$num[] = [];
+
 if(isset($_POST['B']))
 {
    $r = $_POST['R'] * 1;	
@@ -13,44 +15,56 @@ if(isset($_POST['B']))
 
 <html>
     <body>
-        <?php
-        // disegno il form con gli oggetti necessari
-        echo "<form name = 'F1' method = 'post' action = '".$_SERVER['PHP_SELF']."'>";
-        echo "&nbsp; r: <input type = 'text' name = 'R' value = '".$r."' size = '3'>";
-        echo "&nbsp; c: <input type = 'text' name = 'C' value = '".$c."' size = '3'>";
-        echo "&nbsp; <input type = 'submit' name = 'B' value = 'matrice'>";
-        echo "</form>";    
+        <?php   
+         echo "<form name = 'F1' method = 'post' action = '".$_SERVER['PHP_SELF']."'>";
+         echo "&nbsp; Righe: <input type = 'text' name = 'R' value = '".$r."' size = '3'>";
+         echo "&nbsp; Colonne: <input type = 'text' name = 'C' value = '".$c."' size = '3'>";
+         echo "&nbsp; <input type = 'submit' name = 'B' value = 'Genera'>";
+         echo "</form>"; 
+        $max = 0;
 
-        // qui disegno la tabella
-        if($r > 0 && $r < 100 && $c > 0 && $c < 100)
+        if(isset($_POST['B']))
         {
-            if(isset($_POST['B']))
-            {
-                echo "<table border = '1'>";
-                // iterazione per le righe 
-                for($i = 0; $i < $r; $i++)
+            echo "<table border = '2'>";
+
+            for($i = 0; $i < $r; $i++)
+            {	  
+                for($j = 0; $j < $c; $j++)
                 {
-                    echo "<tr>";	  
-                    // iterazione per le colonne
-                    for($j = 0; $j < $c; $j++)
+                    $num[$i][$j] = rand(1, 99);
+                    
+                    if($num[$i][$j] > $max)
                     {
-                        echo "<td style = 'width: 30px; height: 20px; text-align: center'>";
-
-                        // contenuto della singola cella
-                        $num = rand(1, 99);
+                        $max = $num[$i][$j];
                         
-                        echo $num;			
-
-                        echo "</td>";	 
-                    }	 
-                    echo "</tr>";	  
-                }	  
-                echo "</table>";
+                    }
+                }	 
             }
-        }
-        else
-        {
-            echo "Tabella non disponibile";
+
+            for($i = 0; $i < $r; $i++)
+            {
+                echo "<tr>";	  
+
+                for($j = 0; $j < $c; $j++)
+                {
+                    if($num[$i][$j] == $max)
+                    {
+                        echo "<td style = 'width: 30px; height: 20px; text-align: center; background-color: #FF6666;'>".$max;
+                        
+                    }
+                    else
+                    {
+                        echo "<td style = 'width: 30px; height: 20px; text-align: center; background-color: white;'>".$num[$i][$j];
+
+                    }
+
+                    echo "</td>";
+                }	
+
+                echo "</tr>";	  
+            }
+            
+            echo "</table>";
         }
         ?>
     </body>
