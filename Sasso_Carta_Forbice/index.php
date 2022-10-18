@@ -58,7 +58,7 @@
       
       <link rel = "stylesheet" href = "style.css">
    </head>
-   <body>
+   <body align = "center">
       <form name = 'F1' method = 'POST' action = 'index.php'>
          <p> Numero di partite: </p>
          <input type = 'text' name = 'P' size = '5' value = '<?php echo $p; ?>' />
