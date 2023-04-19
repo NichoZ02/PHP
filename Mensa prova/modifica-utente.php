@@ -23,7 +23,7 @@ if(!isset($_GET['id']) || !is_numeric($_GET['id'])) {
             exit();
         } else {
             // Se esiste un utente con questo ID, salva i dati
-            $statement->bind_result($idUtente, $nome, $descrizione, $unitaMisura, $ultimaModifica, $idUtente); // Abbina i risultati della query alle variabili
+            $statement->bind_result($idUtente, $nome, $cognome, $username, $email, $password, $indirizzo, $telefono, $codice_fiscale); // Abbina i risultati della query alle variabili
             $statement->fetch(); // Estrae i risultati dalla query
             $queryUtente = "SELECT nome, cognome FROM utenti WHERE (id_utente = ?)";
             $statementUtente = $mysqli->prepare($queryUtente);
@@ -56,13 +56,18 @@ require_once ABSPATH . '/layout/components/header.php';
 if(isset($_POST['addBtn'])) {
     // Ottieni i dati
     $nome = $_POST['nome'];
-    $descrizione = $_POST['descrizione'];
-    $unitaMisura = $_POST['unita-misura'];
+    $cognome = $_POST['cognome'];
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $indirizzo = $_POST['indirizzo'];
+    $telefono = $_POST['telefono'];
+    $codice_fiscale = $_POST['codice_fiscale'];
     $modificaTempo = date('Y-m-d H:i:s');
     // Query per aggiungere l'utente
-    $query = "UPDATE ingredienti SET nome = ?, descrizione = ?, unita_misura = ?, ultima_modifica = ? WHERE id_utente = ?";
+    $query = "UPDATE utenti SET nome = ?, cognome = ?, username = ?, email = ?, password = ?, indirizzo = ?, telefono = ?, codice_fiscale = ?, ultima_modifica = ? WHERE id_utente = ?";
     $statement = $mysqli->prepare($query);
-    $statement->bind_param('ssssi', $nome, $descrizione, $unitaMisura, $modificaTempo, $idUtente);
+    $statement->bind_param('ssssi', $nome, $cognome, $username, $email, $password, $indirizzo, $telefono, $codice_fiscale, $idUtente);
     // Esegui la query
     if($statement->execute()) {
         $messaggio = '<div class="alert alert-success mt-3" role="alert">Utente modificato con successo. <a href="visualizza-utenti.php?id=' . $idUtente . '">Visualizza utente</a>.</div>';
@@ -87,9 +92,9 @@ if(isset($_POST['addBtn'])) {
     <div class="edit-container mt-3">
         <form class="edit-form" method="POST">
             <div class="edit-form-content">
-                <div class="edit-form-group">
+            <div class="edit-form-group">
                     <label class="fw-bold" for="nome">Nome</label>
-                    <input type="text" class="form-control mt-2" id="nome" name="nome" placeholder="Nome" required value="<?php echo $nome; ?>">
+                    <input type="text" class="form-control mt-2" id="nome" name="nome" placeholder="Nome" required>
                     <p class="edit-form-text text-muted mt-2">Inserisci il nome dell'utente.</p>
                     <div class="edit-form-disclaimer mt-2">
                         <i class="fa-solid fa-circle-exclamation" style="color: #ff0000;"></i>
@@ -97,20 +102,63 @@ if(isset($_POST['addBtn'])) {
                     </div>
                 </div>
                 <div class="edit-form-group mt-4">
-                    <label class="fw-bold mb-2" for="descrizione">Descrizione</label>
-                    <textarea name="descrizione" id="descrizione"><?php echo $descrizione; ?></textarea>
-                    <p class="edit-form-text text-muted mt-2">Inserisci la descrizione dell'utente.</p>
+                    <label class="fw-bold mb-2" for="cognome">Cognome</label>
+                    <input type="text" class="form-control mt-2" id="cognome" name="cognome" placeholder="Cognome" required>
+                    <p class="edit-form-text text-muted mt-2">Inserisci il cognome dell'utente.</p>
+                    <div class="edit-form-disclaimer mt-2">
+                        <i class="fa-solid fa-circle-exclamation" style="color: #ff0000;"></i>
+                        <p class="edit-form-text ms-1 text-danger">Campo richiesto.</p>
+                    </div>
                 </div>
                 <div class="edit-form-group mt-4">
-                    <label class="fw-bold" for="unita-misura">Unità di misura</label>
-                    <select class="form-select mt-2" id="unita-misura" name="unita-misura" required>
-                        <option value="g" <?php if($unitaMisura == 'g') { echo 'selected'; } ?>>Grammi</option>
-                        <option value="kg" <?php if($unitaMisura == 'kg') { echo 'selected'; } ?>>Chilogrammi</option>
-                        <option value="l" <?php if($unitaMisura == 'l') { echo 'selected'; } ?>>Litri</option>
-                        <option value="ml" <?php if($unitaMisura == 'ml') { echo 'selected'; } ?>>Millilitri</option>
-                        <option value="pz" <?php if($unitaMisura == 'pz') { echo 'selected'; } ?>>Pezzi</option>
-                    </select>
-                    <p class="edit-form-text text-muted mt-2">Inserisci l'unità di misura dell'utente.</p>
+                    <label class="fw-bold mb-2" for="username">Username</label>
+                    <input type="text" class="form-control mt-2" id="username" name="username" placeholder="Username" required>
+                    <p class="edit-form-text text-muted mt-2">Inserisci l'username dell'utente.</p>
+                    <div class="edit-form-disclaimer mt-2">
+                        <i class="fa-solid fa-circle-exclamation" style="color: #ff0000;"></i>
+                        <p class="edit-form-text ms-1 text-danger">Campo richiesto.</p>
+                    </div>
+                </div>
+                <div class="edit-form-group mt-4">
+                    <label class="fw-bold mb-2" for="email">Email</label>
+                    <input type="text" class="form-control mt-2" id="email" name="email" placeholder="Email" required>
+                    <p class="edit-form-text text-muted mt-2">Inserisci l'email dell'utente.</p>
+                    <div class="edit-form-disclaimer mt-2">
+                        <i class="fa-solid fa-circle-exclamation" style="color: #ff0000;"></i>
+                        <p class="edit-form-text ms-1 text-danger">Campo richiesto.</p>
+                    </div>
+                </div>
+                <div class="edit-form-group mt-4">
+                    <label class="fw-bold mb-2" for="password">Password</label>
+                    <input type="text" class="form-control mt-2" id="password" name="password" placeholder="Password" required>
+                    <p class="edit-form-text text-muted mt-2">Inserisci la password dell'utente.</p>
+                    <div class="edit-form-disclaimer mt-2">
+                        <i class="fa-solid fa-circle-exclamation" style="color: #ff0000;"></i>
+                        <p class="edit-form-text ms-1 text-danger">Campo richiesto.</p>
+                    </div>
+                </div>
+                <div class="edit-form-group mt-4">
+                    <label class="fw-bold mb-2" for="indirizzo">Indirizzo</label>
+                    <input type="text" class="form-control mt-2" id="indirizzo" name="indirizzo" placeholder="Indirizzo" required>
+                    <p class="edit-form-text text-muted mt-2">Inserisci l'indirizzo dell'utente.</p>
+                    <div class="edit-form-disclaimer mt-2">
+                        <i class="fa-solid fa-circle-exclamation" style="color: #ff0000;"></i>
+                        <p class="edit-form-text ms-1 text-danger">Campo richiesto.</p>
+                    </div>
+                </div>
+                <div class="edit-form-group mt-4">
+                    <label class="fw-bold mb-2" for="telefono">Telefono</label>
+                    <input type="text" class="form-control mt-2" id="telefono" name="telefono" placeholder="Telefono" required>
+                    <p class="edit-form-text text-muted mt-2">Inserisci il telefono dell'utente.</p>
+                    <div class="edit-form-disclaimer mt-2">
+                        <i class="fa-solid fa-circle-exclamation" style="color: #ff0000;"></i>
+                        <p class="edit-form-text ms-1 text-danger">Campo richiesto.</p>
+                    </div>
+                </div>
+                <div class="edit-form-group mt-4">
+                    <label class="fw-bold mb-2" for="codice_fiscale">Codice Fiscale</label>
+                    <input type="text" class="form-control mt-2" id="codice_fiscale" name="codice_fiscale" placeholder="Codice Fiscale" required>
+                    <p class="edit-form-text text-muted mt-2">Inserisci il codice fiscale dell'utente.</p>
                     <div class="edit-form-disclaimer mt-2">
                         <i class="fa-solid fa-circle-exclamation" style="color: #ff0000;"></i>
                         <p class="edit-form-text ms-1 text-danger">Campo richiesto.</p>
@@ -129,36 +177,7 @@ if(isset($_POST['addBtn'])) {
         </div>
     </div>
 </div>
-<!-- Embed CKEditor -->
-<script src="<?php echo ABSPATH . '/assets/vendor/ckeditor/ckeditor.js'; ?>"></script>
-<script src="<?php echo ABSPATH . '/assets/vendor/ckeditor/translations/it.js'; ?>"></script>
-<script>
-    ClassicEditor
-        .create( document.querySelector( '#descrizione' ), {
-            language: 'it',
-            height: '800',
-            mediaEmbed: {
-                previewsInData: true
-            },
-            toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|', 'alignment', '|', 'blockQuote', 'insertTable', 'mediaEmbed', '|', 'undo', 'redo' ],
-            link: {
-                decorators: {
-                    openInNewTab: {
-                        mode: 'manual',
-                        label: 'Open in a new tab',
-                        defaultValue: true,
-                        attributes: {
-                            target: '_blank',
-                            rel: 'noopener noreferrer'
-                        }
-                    }
-                }
-            },
-        } )
-        .catch( error => {
-            console.error( error );
-        } );
-</script>
+
 <?php
 
 // Carica il footer
