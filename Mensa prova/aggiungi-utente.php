@@ -20,7 +20,7 @@ if(isset($_POST['addBtn'])) {
     $statement->bind_param('ssssi', $nome, $cognome, $username, $email, $password, $indirizzo, $telefono, $codice_fiscale);
     // Esegui la query
     if($statement->execute()) {
-        $idUtente = $statement->insert_id; // Da cambiare
+        $idUtente = $statement->insert_id;
         $messaggio = '<div class="alert alert-success mt-3" role="alert">Utente aggiunto con successo. <a href="visualizza-utenti.php?id=' . $idUtente . '">Visualizza utente</a>.</div>';
         $_SESSION['messaggio'] = $messaggio;
         header('Location: modifica-utente.php?id=' . $idUtente . '');
